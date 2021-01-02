@@ -1,6 +1,6 @@
-print("Welcome to mJ_login_system.")
+import json
 
-def introduction():
+def  introduction():
     """
     starting program to decide weather user wants to 
     log in or create a new account
@@ -19,7 +19,41 @@ type "exit" to quit program
         return introduction()
 
 
-def get_username_and_password():
+def subscribe():
+    """
+    when a user selects subscribe option
+    should check list for username in accounts file
+    if it does match return false 
+    else return true
+    """
+    username = input("please enter username: ")
+    password1 = input("now enter password: ")
+    password2 = input("retype password: ")
+    while password1 != password2:
+        print("passwords do not match. please try again")
+        password1 = input("now enter password: ")
+        password2 = input("retype password: ")
+    return(username,password1)
+
+
+def check_accounts(username,password,choice):
+    """
+    choice will be used to determine which check will be
+    executed.
+    checks weather username is in account file
+    if subscribing the check will compare usernames.
+        returns: false if username not in dict
+        returns: true if username is in dict
+    else if user is logging in it will check usernames and 
+    if that username matches the password should match as well.
+        returns: true if username and password match
+        returns: false if username or password don't match
+    """
+    
+    pass
+
+
+def  get_username_and_password():
     """
     this function gets the username and password of user
 
@@ -30,7 +64,12 @@ def get_username_and_password():
     return (user,password)
 
 
-if __name__ == '__main__':
+def run_log():
+    print("Welcome to mJ_login_system.")
+    pass
+
+
+if  __name__ == '__main__':
     
     choice = introduction()
     print(choice)
