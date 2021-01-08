@@ -27,7 +27,7 @@ def start_game():
     print("the dealer's hand: [hidden_card] " + str(dealer[1::]))
 
 
-def blackjack(amount):
+def blackjack(player,amount):
     """
     docstring
     """
@@ -35,17 +35,16 @@ def blackjack(amount):
     pass
 
 
-def count(cards,player = False):
+def count(cards,player=False):
     """
-    docstring
+    gets the total of all cards
     """
 
     total = 0
     for card in cards:
-        card.split()
+        card  = card.split()
         if card[1].isdigit() == True:
             total += int(card[1])
-            print(card[1])
         elif card[1] == 'ace':
             if player == False:
                 total += 1
@@ -66,6 +65,6 @@ def count(cards,player = False):
 if __name__ == '__main__':
     start_game()
     my_turn = True
-    my_total = count(player,my_turn)
+    my_total = count(dealer)
     print(my_total)
     
