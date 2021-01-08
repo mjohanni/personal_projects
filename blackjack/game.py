@@ -27,11 +27,22 @@ def start_game():
     print("the dealer's hand: [hidden_card] " + str(dealer[1::]))
 
 
-def blackjack(player,amount):
+def blackjack(amount,user=False):
     """
     docstring
     """
-    
+    global player,dealer
+    if user == True:
+        if amount < 21:
+            command = ''
+            while command.lower() != 'hold' or command.lower() != 'hit':
+                command = input("hold or hit? :")
+                if command.lower() == 'hit':
+                    new_card = draw_card()
+                    player.append(new_card)
+                elif command.lower() == "hold":
+                    #skip all turns
+                    pass
     pass
 
 
