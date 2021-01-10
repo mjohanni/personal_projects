@@ -2,10 +2,18 @@ import cards
 import random
 dealer = []
 player = []
-
+dealer_total = 0
+player_total = 0
 score = [0,0]
 
+
 def draw_card():
+    """
+    selects a card from the deck and checks if that card
+    already exists in player or dealer's hand if it does 
+    exist it redraws a new card
+    """
+
     card = cards.cards_type[random.randint(0,len(cards.cards_type)-1)]\
         + cards.card_number[random.randint(0,len(cards.card_number)-1)]
     
@@ -25,9 +33,9 @@ def start_game():
         player.append(draw_card())
     print("my cards: " + str(player))
     print("the dealer's hand: [hidden_card] " + str(dealer[1::]))
+    
 
-
-def blackjack(amount,user=False):
+def blackjack(amount,user=False, end_game = False):
     """
     docstring
     """
@@ -42,40 +50,46 @@ def blackjack(amount,user=False):
                     player.append(new_card)
                 elif command.lower() == "hold":
                     #skip all turns
-                    pass
+                    end_game = True
+                    return end_game
+    elif amount == 21:
+        if user == True:
+            print("BLACKJACK!!! PLAYER WINS THE ROUND!")
+            return
+        print("BLACKJACK!!! DEALER WINS THE ROUND!")
+        return
+    elif amount > 21:
+        print("BUST")
+        if user == True:
+            print("DEALER WINS THE ROUND!")
+            return
+        print("PLAYER WINS THE ROUND!")
+        return
     pass
 
 
-def count(cards,player=False):
+def count():
     """
     gets the total of all cards
     """
+    pass
 
-    total = 0
-    for card in cards:
-        card  = card.split()
-        if card[1].isdigit() == True:
-            total += int(card[1])
-        elif card[1] == 'ace':
-            if player == False:
-                total += 1
-            else:
-                ace = input("Should ace be 1 or 11?")
-                while ace != '1' or ace != '11':
-                    ace = input("Please enter correct number: ")
-                total += int(ace)
-        else:
-            if card[1] == 'Jack':
-                total += 11
-            elif card[1] == 'Queen':
-                total += 12
-            elif card[1] == 'King':
-                total += 13
-    return total
 
-if __name__ == '__main__':
+def run_game():
+    """
+    calls all functions and runs to game
+    """
+    global score, player, dealer
+
+
+    hold = False
+    score[0] = score[0] +1
     start_game()
     my_turn = True
     my_total = count(dealer)
     print(my_total)
+
+
+if __name__ == '__main__':
+    run_game()
     
