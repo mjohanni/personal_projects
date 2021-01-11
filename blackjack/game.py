@@ -27,6 +27,8 @@ def start_game():
     at the start this runs and draws 2 
     cards for both the player and the Dealer
     """
+    global dealer_total,player_total
+
     while len(dealer) < 2:
         dealer.append(draw_card())
     while len(player) < 2:
@@ -34,6 +36,38 @@ def start_game():
     print("my cards: " + str(player))
     print("the dealer's hand: [hidden_card] " + str(dealer[1::]))
     
+    for card in dealer:
+    #adds up the dealer's cards
+        card = card.split()
+        if card[1] == "Ace":
+            dealer_total += 1
+        elif card[1].isdigit() == True:
+            dealer_total += int(card[1])
+        elif card[1] == 'King':
+            dealer_total += 13 
+        elif card[1] == 'Queen':
+            dealer_total += 12
+        elif card[1] == 'Jack':
+            dealer_total += 11
+
+    for card in player:
+    #adds up the player's cards
+        card = card.split()
+        if card[1] == 'Ace':
+            request = input("please select number '1' or '11' for ace: ")
+            while int(request) != 1 or int(request) != 11:
+                request = input("please select number '1' or '11' for ace: ")
+            player_total += int(request)
+
+        elif card[1].isdigit() == True:
+            dealer_total += int(card[1])
+        elif card[1] == 'King':
+            dealer_total += 13 
+        elif card[1] == 'Queen':
+            dealer_total += 12
+        elif card[1] == 'Jack':
+            dealer_total += 11
+
 
 def blackjack(amount,user=False, end_game = False):
     """
@@ -72,6 +106,7 @@ def count():
     """
     gets the total of all cards
     """
+
     pass
 
 
@@ -88,6 +123,8 @@ def run_game():
     my_turn = True
     my_total = count(dealer)
     print(my_total)
+    while my_turn == True:
+        pass
 
 
 if __name__ == '__main__':
