@@ -1,11 +1,12 @@
 import cards
 import random
 dealer = []
-player = []
+player = [1,2,3,4,5,6]
 dealer_total = 0
 player_total = 0
 score = [0,0]
-
+D = 0
+P = 0
 
 def draw_card():
     """
@@ -69,11 +70,12 @@ def start_game():
             dealer_total += 11
 
 
-def blackjack(amount,user=False, end_game = False):
+def hit_or_hold(amount,user=False, end_game = False):
     """
     docstring
     """
-    global player,dealer
+    global player,dealer, dealer_total,player_total,D,P
+
     if user == True:
         if amount < 21:
             command = ''
@@ -82,32 +84,56 @@ def blackjack(amount,user=False, end_game = False):
                 if command.lower() == 'hit':
                     new_card = draw_card()
                     player.append(new_card)
+                    player_total = count(player)
                 elif command.lower() == "hold":
                     #skip all turns
                     end_game = True
                     return end_game
-    elif amount == 21:
-        if user == True:
-            print("BLACKJACK!!! PLAYER WINS THE ROUND!")
-            return
-        print("BLACKJACK!!! DEALER WINS THE ROUND!")
-        return
-    elif amount > 21:
-        print("BUST")
-        if user == True:
-            print("DEALER WINS THE ROUND!")
-            return
-        print("PLAYER WINS THE ROUND!")
-        return
-    pass
+
+    elif user == False:
+        while amount < 16:
+            new_card = draw_card()
+            dealer.append(new_card)
+            dealer_total = count(dealer)
+        end_game = True
+        return end_game
 
 
-def count():
+
+    # if amount == 21:
+    #     if user == True:
+    #         print("BLACKJACK!!! PLAYER WINS THE ROUND!")
+    #         return
+    #     print("BLACKJACK!!! DEALER WINS THE ROUND!")
+    #     return
+
+    # elif amount > 21:
+    #     print("BUST")
+    #     if user == True:
+    #         print("DEALER WINS THE ROUND!")
+    #         return
+    #     print("PLAYER WINS THE ROUND!")
+    #     return
+    # pass
+
+
+def count(user):
+    global player_total,dealer_total
     """
     gets the total of all cards
     """
+    total = 0
+    if user == player_total:
+        last_card = player[len(player) -1]
+        total = player_total
+        last_card = last_card.split()
+        return total
+    elif user == dealer_total:
+        last_card = dealer[len(dealer) -1]
+        total = dealer_total
+        last_card = last_card.split()
+        return total
 
-    pass
 
 
 def run_game():
