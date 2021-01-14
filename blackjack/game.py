@@ -99,24 +99,6 @@ def hit_or_hold(amount,user=False, end_game = False):
         return end_game
 
 
-
-    # if amount == 21:
-    #     if user == True:
-    #         print("BLACKJACK!!! PLAYER WINS THE ROUND!")
-    #         return
-    #     print("BLACKJACK!!! DEALER WINS THE ROUND!")
-    #     return
-
-    # elif amount > 21:
-    #     print("BUST")
-    #     if user == True:
-    #         print("DEALER WINS THE ROUND!")
-    #         return
-    #     print("PLAYER WINS THE ROUND!")
-    #     return
-    # pass
-
-
 def count(user):
     global player_total,dealer_total
     """
@@ -135,13 +117,39 @@ def count(user):
         return total
 
 
+def check(p_total,d_total):
+    global score
+    """
+    checks the end values of all cards drawn and changes the score accordingly
+    """
+
+
+    if (p_total == 21 and d_total == 21) or p_total == d_total:
+        print("draw")
+    elif p_total == 21 and d_total != 21:
+        print("Player wins round with BLACKJACK!")
+    elif d_total == 21 and p_total != 21:
+        print("Dealer wins round with BLACKJACK!")
+    
+    if p_total != 21 and d_total != 21:
+        if p_total > 21 and d_total < 21:
+            print("bust!")
+            print("dealer wins the round!")
+        elif d_total > 21 and p_total < 21:
+            print("bust!")
+            print("player wins the round!")
+        elif d_total < 21 and p_total < 21:
+            if p_total > d_total:
+                print("player wins the round!")
+            else:
+                print("dealer wins the round!")
+
 
 def run_game():
     """
     calls all functions and runs to game
     """
     global score, player, dealer
-
 
     hold = False
     score[0] = score[0] +1
@@ -155,4 +163,3 @@ def run_game():
 
 if __name__ == '__main__':
     run_game()
-    
