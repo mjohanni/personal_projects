@@ -1,7 +1,7 @@
 import cards
 import random
 dealer = []
-player = [1,2,3,4,5,6]
+player = []
 dealer_total = 0
 player_total = 0
 score = [0,0]
@@ -61,36 +61,37 @@ def start_game():
             player_total += int(request)
 
         elif card[1].isdigit() == True:
-            dealer_total += int(card[1])
+            player_total += int(card[1])
         elif card[1] == 'King':
-            dealer_total += 13 
+            player_total += 13 
         elif card[1] == 'Queen':
-            dealer_total += 12
+            player_total += 12
         elif card[1] == 'Jack':
-            dealer_total += 11
+            player_total += 11
 
 
-def hit_or_hold(amount,user=False, end_game = False):
+def hit_or_hold(amount, end_game = False):
     """
     docstring
     """
     global player,dealer, dealer_total,player_total,D,P
 
-    if user == True:
+    if amount == player_total:
         if amount < 21:
             command = ''
             while command.lower() != 'hold' or command.lower() != 'hit':
                 command = input("hold or hit? :")
-                if command.lower() == 'hit':
-                    new_card = draw_card()
-                    player.append(new_card)
-                    player_total = count(player)
-                elif command.lower() == "hold":
-                    #skip all turns
-                    end_game = True
-                    return end_game
+            if command.lower() == 'hit':
+                new_card = draw_card()
+                player.append(new_card)
+                player_total = count(player)
 
-    elif user == False:
+            else:
+                #skip all turns
+                end_game = True
+                return end_game
+
+    elif amount == dealer_total:
         while amount < 16:
             new_card = draw_card()
             dealer.append(new_card)
@@ -105,15 +106,41 @@ def count(user):
     gets the total of all cards
     """
     total = 0
-    if user == player_total:
+    if user == player:
         last_card = player[len(player) -1]
         total = player_total
         last_card = last_card.split()
+        if last_card[1].isdigit() == True:
+            total += int(last_card[1])
+        elif last_card[1] == 'King':
+            total += 13 
+        elif last_card[1] == 'Queen':
+            total += 12
+        elif last_card[1] == 'Jack':
+            total += 11
+        elif last_card[1] == 'Ace':
+            user_input = input("please select 1 or 11")
+            while user_input != '1' or '11':
+                user_input = input("please select 1 or 11")
         return total
-    elif user == dealer_total:
+
+    elif user == dealer:
         last_card = dealer[len(dealer) -1]
         total = dealer_total
         last_card = last_card.split()
+        if last_card[1].isdigit() == True:
+            total += int(last_card[1])
+        elif last_card[1] == 'King':
+            total += 13 
+        elif last_card[1] == 'Queen':
+            total += 12
+        elif last_card[1] == 'Jack':
+            total += 11
+        elif last_card[1] == 'Ace':
+            if (total + 11) == 21:
+                total += 11
+            else:
+                total += 1
         return total
 
 
@@ -145,20 +172,24 @@ def check(p_total,d_total):
                 print("dealer wins the round!")
 
 
+def keep_score():
+    pass
+
+
 def run_game():
     """
     calls all functions and runs to game
     """
     global score, player, dealer
 
-    hold = False
-    score[0] = score[0] +1
+    dealer_turn = False
     start_game()
-    my_turn = True
-    my_total = count(dealer)
-    print(my_total)
-    while my_turn == True:
-        pass
+    print(str(player_total)+"   "+ str(dealer_total))
+    dealer_turn = hit_or_hold(player_total)
+    if dealer_turn == True:
+        dealer_turn = False
+        dealer_turn = hit_or_hold(dealer_total)
+    check(player_total,dealer_total)
 
 
 if __name__ == '__main__':
