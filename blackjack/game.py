@@ -18,7 +18,7 @@ def draw_card():
     card = cards.cards_type[random.randint(0,len(cards.cards_type)-1)]\
         + cards.card_number[random.randint(0,len(cards.card_number)-1)]
     
-    if card not in dealer or card not in player:
+    if card not in dealer and card not in player:
         return card
     return draw_card()
 
@@ -55,11 +55,8 @@ def start_game():
     #adds up the player's cards
         card = card.split()
         if card[1] == 'Ace':
-            request = input("please select number '1' or '11' for ace: ")
-            while int(request) != 1 or int(request) != 11:
-                request = input("please select number '1' or '11' for ace: ")
-            player_total += int(request)
-
+            ace = get_ace()
+            player_total += int(ace)
         elif card[1].isdigit() == True:
             player_total += int(card[1])
         elif card[1] == 'King':
@@ -70,32 +67,52 @@ def start_game():
             player_total += 11
 
 
-def hit_or_hold(amount, end_game = False):
+def get_ace():
+    """
+    selects and checks the ace value
+    """
+    ace = input("please select 1 or 11 for ace value")
+    if ace == str(1) or ace == str(11):
+        return ace
+    return get_ace()
+
+
+def get_command():
+    command = input("please choose HIT or HOLD: ").lower()
+    if command == "hit" or command == 'hold':
+        return command
+    return get_command()
+
+
+def hit_or_hold(user, end_game = False):
     """
     docstring
     """
     global player,dealer, dealer_total,player_total,D,P
 
-    if amount == player_total:
-        if amount < 21:
-            command = ''
-            while command.lower() != 'hold' or command.lower() != 'hit':
-                command = input("hold or hit? :")
-            if command.lower() == 'hit':
+    if user == player:
+        if player_total < 21:
+            command = get_command()
+            if command == 'hit':
                 new_card = draw_card()
                 player.append(new_card)
                 player_total = count(player)
+                print(player)
+                print(str(player_total))
+                return hit_or_hold(player)
+        end_game = True        
+        return end_game
 
-            else:
-                #skip all turns
-                end_game = True
-                return end_game
-
-    elif amount == dealer_total:
-        while amount < 16:
+    elif user == dealer:
+        print(dealer)
+        while dealer_total < 16:
+            print("dealer hits")
             new_card = draw_card()
             dealer.append(new_card)
             dealer_total = count(dealer)
+            print(dealer)
+            print(dealer_total)
+        print("dealer holds")
         end_game = True
         return end_game
 
@@ -150,8 +167,8 @@ def check(p_total,d_total):
     checks the end values of all cards drawn and changes the score accordingly
     """
 
-
-    if (p_total == 21 and d_total == 21) or p_total == d_total:
+    if (p_total == 21 and d_total == 21) or p_total == d_total\
+        or (p_total > 21 and d_total > 21):
         print("draw")
     elif p_total == 21 and d_total != 21:
         print("Player wins round with BLACKJACK!")
@@ -182,13 +199,17 @@ def run_game():
     """
     global score, player, dealer
 
-    dealer_turn = False
+    end_turn = False
     start_game()
-    print(str(player_total)+"   "+ str(dealer_total))
-    dealer_turn = hit_or_hold(player_total)
-    if dealer_turn == True:
-        dealer_turn = False
-        dealer_turn = hit_or_hold(dealer_total)
+    while True:
+        end_turn = hit_or_hold(player)
+        if end_turn == True:
+            end_turn = False
+            break
+    while True:
+        end_turn = hit_or_hold(dealer)
+        if end_turn == True:
+            break
     check(player_total,dealer_total)
 
 
