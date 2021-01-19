@@ -5,8 +5,6 @@ player = []
 dealer_total = 0
 player_total = 0
 score = [0,0]
-D = 0
-P = 0
 
 def draw_card():
     """
@@ -28,7 +26,11 @@ def start_game():
     at the start this runs and draws 2 
     cards for both the player and the Dealer
     """
-    global dealer_total,player_total
+    global dealer_total,player_total,player,dealer
+    player = []
+    dealer = []
+    dealer_total = 0
+    player_total = 0
 
     while len(dealer) < 2:
         dealer.append(draw_card())
@@ -88,7 +90,7 @@ def hit_or_hold(user, end_game = False):
     """
     docstring
     """
-    global player,dealer, dealer_total,player_total,D,P
+    global player,dealer, dealer_total,player_total
 
     if user == player:
         if player_total < 21:
@@ -112,7 +114,8 @@ def hit_or_hold(user, end_game = False):
             dealer_total = count(dealer)
             print(dealer)
             print(dealer_total)
-        print("dealer holds")
+        if dealer_total <= 21:
+            print("dealer holds")
         end_game = True
         return end_game
 
@@ -166,51 +169,77 @@ def check(p_total,d_total):
     """
     checks the end values of all cards drawn and changes the score accordingly
     """
+    p_score = 0
+    d_score = 0
 
     if (p_total == 21 and d_total == 21) or p_total == d_total\
         or (p_total > 21 and d_total > 21):
         print("draw")
     elif p_total == 21 and d_total != 21:
         print("Player wins round with BLACKJACK!")
+        p_score = 1
     elif d_total == 21 and p_total != 21:
         print("Dealer wins round with BLACKJACK!")
+        d_score = 1
     
     if p_total != 21 and d_total != 21:
         if p_total > 21 and d_total < 21:
             print("bust!")
             print("dealer wins the round!")
+            d_score = 1
         elif d_total > 21 and p_total < 21:
             print("bust!")
             print("player wins the round!")
+            p_score = 1
         elif d_total < 21 and p_total < 21:
             if p_total > d_total:
                 print("player wins the round!")
+                p_score = 1
             else:
                 print("dealer wins the round!")
+                d_score = 1
+    if p_score > d_score:
+        score[0] += p_score
+    else:
+        score[1] += d_score
 
 
-def keep_score():
-    pass
-
+def game_loop():
+    user_input = input("start next game? Y/n: ")
+    if user_input.lower() != 'y' or user_input.lower() != 'n':
+        print("Enter appropriate response.")
+        return game_loop()
+    elif user_input == 'y':
+        return True
+    return False
 
 def run_game():
     """
     calls all functions and runs to game
     """
     global score, player, dealer
-
-    end_turn = False
-    start_game()
-    while True:
-        end_turn = hit_or_hold(player)
-        if end_turn == True:
-            end_turn = False
-            break
-    while True:
-        end_turn = hit_or_hold(dealer)
-        if end_turn == True:
-            break
-    check(player_total,dealer_total)
+    # game_loop = ''
+    # while game_loop != 'end' or game_loop != 'start':
+    #     game_loop = input('please insert "end" to end game or "start" \
+    #         to start a new game')
+    # end_turn = False
+    game = True
+    while game == True:
+        start_game()
+        while True:
+            end_turn = hit_or_hold(player)
+            if end_turn == True:
+                end_turn = False
+                break
+        while True:
+            end_turn = hit_or_hold(dealer)
+            if end_turn == True:
+                break
+        check(player_total,dealer_total)
+        print("current score is:")
+        print("player has "+str(score[0])+" points.")
+        print("dealer has "+str(score[1])+" points.")
+        game = game_loop()
 
 
 if __name__ == '__main__':
