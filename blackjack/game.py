@@ -73,7 +73,7 @@ def get_ace():
     """
     selects and checks the ace value
     """
-    ace = input("please select 1 or 11 for ace value")
+    ace = input("please select 1 or 11 for ace value: ")
     if ace == str(1) or ace == str(11):
         return ace
     return get_ace()
@@ -206,12 +206,13 @@ def check(p_total,d_total):
 
 def game_loop():
     user_input = input("start next game? Y/n: ")
-    if user_input.lower() != 'y' or user_input.lower() != 'n':
-        print("Enter appropriate response.")
-        return game_loop()
-    elif user_input == 'y':
-        return True
-    return False
+    if user_input.lower() =="y" or user_input.lower() == "n":
+        if user_input.lower() == "y":
+            return True
+        return False
+    print("Enter appropriate response.")
+    return game_loop()
+
 
 def run_game():
     """
@@ -240,7 +241,7 @@ def run_game():
         print("player has "+str(score[0])+" points.")
         print("dealer has "+str(score[1])+" points.")
         game = game_loop()
-
+    print("GG")
 
 if __name__ == '__main__':
     run_game()
